@@ -46,11 +46,13 @@ def index():
         channel_id = request.form["channel_id"]
         message = request.form["message"]
 
-        # Send message to Discord channel
+        # Send message to Discord channel as a boxed code block
         try:
             channel = bot.get_channel(int(channel_id))
             if channel:
-                bot.loop.create_task(channel.send(message))
+                # Format the message with triple backticks for code block styling
+                boxed_message = f"```\n{message}\n```"
+                bot.loop.create_task(channel.send(boxed_message))
                 return "Message sent successfully!"
             else:
                 return "Invalid channel ID or bot cannot access the channel."
@@ -69,6 +71,7 @@ def run_flask():
     app.run(host="0.0.0.0", port=5000)
 
 # Run Flask and Bot
-import threading
-threading.Thread(target=run_flask).start()
-bot.run(TOKEN)
+if __name__ == "__main__":
+    import threading
+    threading.Thread(target=run_flask).start()
+    bot.run(TOKEN)
